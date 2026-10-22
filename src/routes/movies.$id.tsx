@@ -16,55 +16,43 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/movies/$id")({
-  head: ({ loaderData }) => ({
+  head: () => ({
     meta: [
-      {
-        title: loaderData?.movie
-          ? `${loaderData.movie.title} — CineBook`
-          : "Movie — CineBook",
-      },
+      { title: "Movie Details — CineBook" },
       {
         name: "description",
-        content: loaderData?.movie?.synopsis ?? "Movie details on CineBook.",
+        content: "Synopsis, rating, cinema locations and showtimes for this movie on CineBook.",
       },
-      {
-        property: "og:title",
-        content: loaderData?.movie ? `${loaderData.movie.title} — CineBook` : "Movie — CineBook",
-      },
+      { property: "og:title", content: "Movie Details — CineBook" },
       {
         property: "og:description",
-        content: loaderData?.movie?.synopsis ?? "Movie details on CineBook.",
+        content: "Synopsis, rating, cinema locations and showtimes for this movie on CineBook.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  // Seeds only: admin-added movies live in localStorage (client-side), which
-  // the SSR-safe loader cannot read. The component checks localStorage after
-  // mount and shows a not-found panel for unknown ids.
-  loader: ({ params }) => {
-    const movie = SEED_MOVIES.find((m) => m.id === params.id) ?? null;
-    return { movie };
-  },
   component: MovieDetails,
 });
 
 function MovieDetails() {
   const { id } = Route.useParams();
-  const { movie: seedMovie } = Route.useLoaderData();
 
-  const [movie, setMovie] = useState<Movie | null>(seedMovie);
+  // Seeds for SSR; admin edits live in localStorage and are preferred after mount.
+  const [movie, setMovie] = useState<Movie | null>(
+    () => SEED_MOVIES.find((m) => m.id === id) ?? null,
+  );
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
   const [activeDate, setActiveDate] = useState<string>("");
 
-  // Admin edits live in localStorage; prefer them over the seed row.
   useEffect(() => {
     const stored = loadMovies();
-    setMovie(stored.find((m) => m.id === id) ?? seedMovie);
+    setMovie(stored.find((m) => m.id === id) ?? null);
     const st = loadShowtimes().filter((s) => s.movieId === id);
     setShowtimes(st);
     if (st.length > 0) setActiveDate(st[0].date);
-  }, [id, seedMovie]);
+  }, [id]);
+
 
   const dates = useMemo(
     () => [...new Set(showtimes.map((s) => s.date))].sort(),
