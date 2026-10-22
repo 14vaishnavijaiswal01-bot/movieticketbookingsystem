@@ -475,7 +475,7 @@ function MovieFormModal({
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const next: FormErrors = {};
-    const duration = Number(form.duration);
+    if (form.title.trim().length < 2) next.title = "Title is required.";
     if (!Number.isFinite(duration) || duration < 30 || duration > 300)
       next.duration = "Duration must be between 30 and 300 minutes.";
     const imdb = Number(form.imdb);
