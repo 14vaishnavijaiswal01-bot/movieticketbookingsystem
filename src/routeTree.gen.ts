@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as MyBookingsRouteImport } from './routes/my-bookings'
 import { Route as BookShowtimeIdRouteImport } from './routes/book.$showtimeId'
 import { Route as ConfirmationRefRouteImport } from './routes/confirmation.$ref'
@@ -18,6 +19,11 @@ import { Route as MoviesIdRouteImport } from './routes/movies.$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MyBookingsRoute = MyBookingsRouteImport.update({
@@ -43,6 +49,7 @@ const MoviesIdRoute = MoviesIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/my-bookings': typeof MyBookingsRoute
   '/book/$showtimeId': typeof BookShowtimeIdRoute
   '/confirmation/$ref': typeof ConfirmationRefRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/my-bookings': typeof MyBookingsRoute
   '/book/$showtimeId': typeof BookShowtimeIdRoute
   '/confirmation/$ref': typeof ConfirmationRefRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/my-bookings': typeof MyBookingsRoute
   '/book/$showtimeId': typeof BookShowtimeIdRoute
   '/confirmation/$ref': typeof ConfirmationRefRoute
@@ -67,6 +76,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/my-bookings'
     | '/book/$showtimeId'
     | '/confirmation/$ref'
@@ -74,6 +84,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/my-bookings'
     | '/book/$showtimeId'
     | '/confirmation/$ref'
@@ -81,6 +92,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/my-bookings'
     | '/book/$showtimeId'
     | '/confirmation/$ref'
@@ -89,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   MyBookingsRoute: typeof MyBookingsRoute
   BookShowtimeIdRoute: typeof BookShowtimeIdRoute
   ConfirmationRefRoute: typeof ConfirmationRefRoute
@@ -102,6 +115,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/my-bookings': {
@@ -137,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   MyBookingsRoute: MyBookingsRoute,
   BookShowtimeIdRoute: BookShowtimeIdRoute,
   ConfirmationRefRoute: ConfirmationRefRoute,
