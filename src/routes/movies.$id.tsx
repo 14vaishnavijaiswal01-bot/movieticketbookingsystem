@@ -50,7 +50,8 @@ function MovieDetails() {
     setMovie(stored.find((m) => m.id === id) ?? null);
     const st = loadShowtimes().filter((s) => s.movieId === id);
     setShowtimes(st);
-    if (st.length > 0) setActiveDate(st[0].date);
+    const first = st[0];
+    if (first) setActiveDate(first.date);
   }, [id]);
 
 
