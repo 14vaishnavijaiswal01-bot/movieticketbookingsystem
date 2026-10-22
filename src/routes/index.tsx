@@ -9,7 +9,6 @@ import {
   SEED_MOVIES,
   allGenres,
   formatDuration,
-  getSeedShowtimes,
   loadMovies,
 } from "@/lib/cinebook";
 import { cn } from "@/lib/utils";

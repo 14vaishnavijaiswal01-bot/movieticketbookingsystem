@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { Calendar, Clock, MapPin, Star } from "lucide-react";
 
@@ -10,7 +10,6 @@ import {
   formatDuration,
   formatPrice,
   formatTime,
-  getSeedShowtimes,
   loadMovies,
   loadShowtimes,
 } from "@/lib/cinebook";
@@ -28,15 +27,23 @@ export const Route = createFileRoute("/movies/$id")({
         name: "description",
         content: loaderData?.movie?.synopsis ?? "Movie details on CineBook.",
       },
-      { property: "og:title", content: loaderData?.movie ? `${loaderData.movie.title} — CineBook` : "Movie — CineBook" },
-      { property: "og:description", content: loaderData?.movie?.synopsis ?? "Movie details on CineBook." },
+      {
+        property: "og:title",
+        content: loaderData?.movie ? `${loaderData.movie.title} — CineBook` : "Movie — CineBook",
+      },
+      {
+        property: "og:description",
+        content: loaderData?.movie?.synopsis ?? "Movie details on CineBook.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
+  // Seeds only: admin-added movies live in localStorage (client-side), which
+  // the SSR-safe loader cannot read. The component checks localStorage after
+  // mount and shows a not-found panel for unknown ids.
   loader: ({ params }) => {
     const movie = SEED_MOVIES.find((m) => m.id === params.id) ?? null;
-    if (!movie) throw notFound();
     return { movie };
   },
   component: MovieDetails,
@@ -46,13 +53,14 @@ function MovieDetails() {
   const { id } = Route.useParams();
   const { movie: seedMovie } = Route.useLoaderData();
 
-  const [movie, setMovie] = useState<Movie>(seedMovie);
+  const [movie, setMovie] = useState<Movie | null>(seedMovie);
   const [showtimes, setShowtimes] = useState<Showtime[]>([]);
   const [activeDate, setActiveDate] = useState<string>("");
 
   // Admin edits live in localStorage; prefer them over the seed row.
   useEffect(() => {
-    setMovie(loadMovies().find((m) => m.id === id) ?? seedMovie);
+    const stored = loadMovies();
+    setMovie(stored.find((m) => m.id === id) ?? seedMovie);
     const st = loadShowtimes().filter((s) => s.movieId === id);
     setShowtimes(st);
     if (st.length > 0) setActiveDate(st[0].date);
@@ -65,6 +73,23 @@ function MovieDetails() {
   const dayShowtimes = showtimes
     .filter((s) => s.date === activeDate)
     .sort((a, b) => a.time.localeCompare(b.time));
+
+  if (!movie) {
+    return (
+      <div className="mx-auto max-w-6xl px-4 py-16 text-center">
+        <h1 className="text-2xl font-bold text-foreground">Movie not found</h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          This movie may have been removed from the catalogue.
+        </p>
+        <Link
+          to="/"
+          className="mt-6 inline-block rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+        >
+          Back to Movies
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
@@ -171,8 +196,8 @@ function MovieDetails() {
             </section>
           ) : (
             <p className="mt-2 rounded-xl border border-dashed border-border p-6 text-sm text-muted-foreground">
-              🎬 This movie is coming soon to CineBook. Ticket bookings will open
-              once showtimes are announced.
+              This movie is coming soon to CineBook. Ticket bookings will open once
+              showtimes are announced.
             </p>
           )}
         </div>
