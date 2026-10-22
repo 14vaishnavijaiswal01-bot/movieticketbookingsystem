@@ -195,7 +195,7 @@ export function getSeedShowtimes(): Showtime[] {
           movieId: movie.id,
           date,
           time,
-          location: CINEMAS[h % CINEMAS.length],
+          location: CINEMAS[h % CINEMAS.length] ?? CINEMAS[0] ?? "CineBook Downtown",
           screen: `Screen ${1 + (h % 4)}`,
           price: 150,
           premiumPrice: 240,
@@ -289,7 +289,7 @@ export function isPremiumSeat(row: string): boolean {
 }
 
 export function seatPrice(seat: string, showtime: Showtime): number {
-  return isPremiumSeat(seat[0]) ? showtime.premiumPrice : showtime.price;
+  return isPremiumSeat(seat.charAt(0)) ? showtime.premiumPrice : showtime.price;
 }
 
 export function seatsTotal(seats: string[], showtime: Showtime): number {

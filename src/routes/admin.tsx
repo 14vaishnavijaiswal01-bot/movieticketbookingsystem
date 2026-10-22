@@ -43,6 +43,43 @@ export const Route = createFileRoute("/admin")({
 
 type Tab = "movies" | "showtimes" | "bookings";
 
+interface MovieFormState {
+  title: string;
+  genres: string;
+  duration: string;
+  cert: string;
+  imdb: string;
+  synopsis: string;
+  poster: string;
+  status: MovieStatus;
+  featured: boolean;
+}
+
+interface ShowtimeFormState {
+  movieId: string;
+  date: string;
+  time: string;
+  location: string;
+  screen: string;
+  price: string;
+  premiumPrice: string;
+}
+
+interface FormErrors {
+  title?: string | undefined;
+  genres?: string | undefined;
+  duration?: string | undefined;
+  cert?: string | undefined;
+  imdb?: string | undefined;
+  synopsis?: string | undefined;
+  movieId?: string | undefined;
+  date?: string | undefined;
+  time?: string | undefined;
+  screen?: string | undefined;
+  price?: string | undefined;
+  premiumPrice?: string | undefined;
+}
+
 function AdminPage() {
   const [tab, setTab] = useState<Tab>("movies");
   const [movies, setMovies] = useState<Movie[]>(SEED_MOVIES);
@@ -410,8 +447,8 @@ function MovieFormModal({
   onClose: () => void;
   onSave: (movie: Movie) => void;
 }) {
-  const [form, setForm] = useState(() => emptyMovieForm());
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [form, setForm] = useState<MovieFormState>(() => emptyMovieForm());
+  const [errors, setErrors] = useState<FormErrors>({});
 
   // Re-seed the form whenever the modal opens (add or edit).
   useEffect(() => {
@@ -437,8 +474,7 @@ function MovieFormModal({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const next: Record<string, string> = {};
-    if (form.title.trim().length < 2) next.title = "Title is required.";
+    const next: FormErrors = {};
     const duration = Number(form.duration);
     if (!Number.isFinite(duration) || duration < 30 || duration > 300)
       next.duration = "Duration must be between 30 and 300 minutes.";

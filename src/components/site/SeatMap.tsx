@@ -6,7 +6,6 @@ import {
   SEAT_ROWS,
   SEATS_PER_ROW,
   formatPrice,
-  isPremiumSeat,
   seatPrice,
 } from "@/lib/cinebook";
 import { cn } from "@/lib/utils";
@@ -107,8 +106,4 @@ export function SeatMap({ showtime, booked, selected, onToggle }: SeatMapProps) 
       </div>
     </div>
   );
-}
-
-export function isPremiumSeatSeat(seat: string) {
-  return isPremiumSeat(seat[0]);
 }
