@@ -476,6 +476,7 @@ function MovieFormModal({
     e.preventDefault();
     const next: FormErrors = {};
     if (form.title.trim().length < 2) next.title = "Title is required.";
+    const duration = Number(form.duration);
     if (!Number.isFinite(duration) || duration < 30 || duration > 300)
       next.duration = "Duration must be between 30 and 300 minutes.";
     const imdb = Number(form.imdb);
@@ -594,7 +595,7 @@ function ShowtimeFormModal({
   onSave: (showtime: Showtime) => void;
 }) {
   const [form, setForm] = useState(() => emptyShowtimeForm());
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<FormErrors>({});
 
   useEffect(() => {
     if (open) {
@@ -617,7 +618,7 @@ function ShowtimeFormModal({
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const next: Record<string, string> = {};
+    const next: FormErrors = {};
     if (!form.movieId) next.movieId = "Select a movie.";
     if (!form.date) next.date = "Pick a date.";
     if (!form.time) next.time = "Pick a time.";
@@ -721,7 +722,7 @@ function emptyShowtimeForm() {
     movieId: "",
     date: "",
     time: "18:00",
-    location: CINEMAS[0],
+    location: CINEMAS[0] ?? "",
     screen: "Screen 1",
     price: "150",
     premiumPrice: "240",
@@ -739,7 +740,7 @@ function Input({
   type = "text",
 }: {
   label: string;
-  error?: string;
+  error?: string | undefined;
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -770,7 +771,7 @@ function Textarea({
   onChange,
 }: {
   label: string;
-  error?: string;
+  error?: string | undefined;
   value: string;
   onChange: (value: string) => void;
 }) {
