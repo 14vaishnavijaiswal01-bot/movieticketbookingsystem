@@ -15,24 +15,35 @@ import {
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "CineBook — Now Showing & Coming Soon Movies" },
-      {
-        name: "description",
-        content:
-          "Search movies by genre, browse what's now showing and coming soon, and book your seats at CineBook cinemas.",
-      },
-      { property: "og:title", content: "CineBook — Now Showing & Coming Soon Movies" },
-      {
-        property: "og:description",
-        content:
-          "Search movies by genre, browse what's now showing and coming soon, and book your seats at CineBook cinemas.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () => {
+    const featured =
+      SEED_MOVIES.find((m) => m.featured && m.status === "now-showing") ??
+      SEED_MOVIES.find((m) => m.status === "now-showing");
+    return {
+      meta: [
+        { title: "CineBook — Now Showing & Coming Soon Movies" },
+        {
+          name: "description",
+          content:
+            "Search movies by genre, browse what's now showing and coming soon, and book your seats at CineBook cinemas.",
+        },
+        { property: "og:title", content: "CineBook — Now Showing & Coming Soon Movies" },
+        {
+          property: "og:description",
+          content:
+            "Search movies by genre, browse what's now showing and coming soon, and book your seats at CineBook cinemas.",
+        },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        ...(featured
+          ? [
+              { property: "og:image", content: featured.backdrop },
+              { name: "twitter:image", content: featured.backdrop },
+            ]
+          : []),
+      ],
+    };
+  },
   component: Index,
 });
 
@@ -64,10 +75,8 @@ function Index() {
   const nowShowing = filtered.filter((m) => m.status === "now-showing");
   const comingSoon = filtered.filter((m) => m.status === "coming-soon");
 
-  const earliestShowtimeCount = featured ? getSeedShowtimes().length : 0;
-  void earliestShowtimeCount;
-
   return (
+
     <div className="mx-auto max-w-6xl px-4 py-8">
       {/* Hero */}
       {featured && (
