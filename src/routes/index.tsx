@@ -34,12 +34,6 @@ export const Route = createFileRoute("/")({
         },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
-        ...(featured
-          ? [
-              { property: "og:image", content: featured.backdrop },
-              { name: "twitter:image", content: featured.backdrop },
-            ]
-          : []),
       ],
     };
   },
