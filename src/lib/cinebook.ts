@@ -66,8 +66,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 8.7,
     synopsis:
       "When Earth becomes uninhabitable, a team of explorers travels through a wormhole in search of a new home for humanity. Cooper, a former pilot turned farmer, must leave his family behind to save mankind.",
-    poster: `${POSTER}/gEU2QniE6E77NI6lMY6E4v7cUdO.jpg`,
-    backdrop: `${BACKDROP}/gEU2QniE6E77NI6lMY6E4v7cUdO.jpg`,
+    poster: posterInterstellar,
+    backdrop: posterInterstellar,
     status: "now-showing",
     featured: true,
   },
@@ -80,8 +80,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 9.0,
     synopsis:
       "Batman faces his greatest challenge yet in the form of the Joker, a psychopathic criminal mastermind who plunges Gotham City into anarchy and forces the Dark Knight to question everything he stands for.",
-    poster: `${POSTER}/qJ2tW6WMUDux911r2mKduZ8t3No.jpg`,
-    backdrop: `${BACKDROP}/qJ2tW6WMUDux911r2mKduZ8t3No.jpg`,
+    poster: posterDarkKnight,
+    backdrop: posterDarkKnight,
     status: "now-showing",
   },
   {
@@ -93,8 +93,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 8.8,
     synopsis:
       "Dom Cobb is a skilled thief who steals secrets from within the subconscious during dreams. Offered a chance at redemption, he must pull off the impossible: planting an idea instead of stealing one.",
-    poster: `${POSTER}/9gk7adHTeD2TKfh6zfh1zntGaAi.jpg`,
-    backdrop: `${BACKDROP}/9gk7adHTeD2TKfh6zfh1zntGaAi.jpg`,
+    poster: posterInception,
+    backdrop: posterInception,
     status: "now-showing",
   },
   {
@@ -106,8 +106,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 8.5,
     synopsis:
       "Paul Atreides unites with the Fremen while on a warpath of revenge against the conspirators who destroyed his family. Torn between love and destiny, he faces a choice that will decide the fate of Arrakis.",
-    poster: `${POSTER}/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg`,
-    backdrop: `${BACKDROP}/xOMo8BRK7PfcJv9JCnx7s5hj0PX.jpg`,
+    poster: posterDuneTwo,
+    backdrop: posterDuneTwo,
     status: "now-showing",
   },
   {
@@ -119,8 +119,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 8.2,
     synopsis:
       "Peter Parker's identity is revealed to the world, turning his life upside down. Desperate to fix things, he asks Doctor Strange for help — and accidentally opens the door to villains from other universes.",
-    poster: `${POSTER}/1g0dhYtq4irv1tFqX6Ebfsf0yQN.jpg`,
-    backdrop: `${BACKDROP}/1g0dhYtq4irv1tFqX6Ebfsf0yQN.jpg`,
+    poster: posterSpiderman,
+    backdrop: posterSpiderman,
     status: "now-showing",
   },
   {
@@ -132,8 +132,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 8.3,
     synopsis:
       "The story of J. Robert Oppenheimer, the brilliant physicist whose Manhattan Project changed the course of World War II — and whose creation changed the course of history forever.",
-    poster: `${POSTER}/8Gxv8gSFCU0XGDanEGh76rCQCGX.jpg`,
-    backdrop: `${BACKDROP}/8Gxv8gSFCU0XGDanEGh76rCQCGX.jpg`,
+    poster: posterOppenheimer,
+    backdrop: posterOppenheimer,
     status: "coming-soon",
   },
   {
@@ -145,8 +145,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 9.2,
     synopsis:
       "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son, Michael Corleone — a war hero drawn into a life he never wanted.",
-    poster: `${POSTER}/3bhkrj58Vtu7enYsRolDm316qln.jpg`,
-    backdrop: `${BACKDROP}/3bhkrj58Vtu7enYsRolDm316qln.jpg`,
+    poster: posterGodfather,
+    backdrop: posterGodfather,
     status: "coming-soon",
   },
   {
@@ -158,8 +158,8 @@ export const SEED_MOVIES: Movie[] = [
     imdb: 7.5,
     synopsis:
       "Jake Sully and Neytiri have formed a family, but when an ancient threat resurfaces, they must leave their home and explore the oceans of Pandora to protect their children.",
-    poster: `${POSTER}/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg`,
-    backdrop: `${BACKDROP}/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg`,
+    poster: posterAvatar,
+    backdrop: posterAvatar,
     status: "coming-soon",
   },
 ];
