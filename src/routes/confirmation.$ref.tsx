@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { CircleCheck, Clock, MapPin } from "lucide-react";
+import { CircleCheck, Clock, Download, MapPin } from "lucide-react";
 
 import type { Booking } from "@/lib/cinebook";
 import {
@@ -8,9 +8,12 @@ import {
   formatPrice,
   formatTime,
   getMovieById,
+  getShowtimeById,
   loadBookings,
   loadMovies,
+  loadShowtimes,
 } from "@/lib/cinebook";
+import { downloadTicketPdf } from "@/lib/ticket-pdf";
 
 export const Route = createFileRoute("/confirmation/$ref")({
   head: () => ({
@@ -151,6 +154,20 @@ function ConfirmationPage() {
       </div>
 
       <div className="mt-6 flex flex-wrap justify-center gap-3">
+        <button
+          type="button"
+          onClick={() => {
+            void downloadTicketPdf(
+              booking,
+              getMovieById(booking.movieId, loadMovies()),
+              getShowtimeById(booking.showtimeId, loadShowtimes()),
+            );
+          }}
+          className="flex items-center gap-2 rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+        >
+          <Download className="h-4 w-4" />
+          Download PDF Ticket
+        </button>
         <Link
           to="/my-bookings"
           className="rounded-lg border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-accent"
@@ -159,7 +176,7 @@ function ConfirmationPage() {
         </Link>
         <Link
           to="/"
-          className="rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:opacity-90"
+          className="rounded-lg border border-border px-6 py-3 text-sm font-medium text-foreground hover:bg-accent"
         >
           Book Another Movie
         </Link>
