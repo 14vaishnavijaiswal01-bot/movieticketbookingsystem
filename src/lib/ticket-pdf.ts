@@ -11,7 +11,14 @@ function money(n: number): string {
 
 // Deterministic pseudo-barcode bars derived from the booking reference,
 // matching the on-screen e-ticket.
-function drawBarcode(doc: import("jspdf").jsPDF, ref: string, x: number, y: number, width: number, height: number) {
+function drawBarcode(
+  doc: import("jspdf").jsPDF,
+  ref: string,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+) {
   doc.setFillColor(30, 30, 30);
   const bars = 40;
   const barWidth = width / bars;
@@ -25,7 +32,7 @@ function drawBarcode(doc: import("jspdf").jsPDF, ref: string, x: number, y: numb
 
 export async function downloadTicketPdf(
   booking: Booking,
-  movieTitle: string,
+  movie: Pick<Movie, "title" | "duration"> | undefined,
   showtime: Showtime | undefined,
 ): Promise<void> {
   const { jsPDF } = await import("jspdf");
@@ -54,22 +61,21 @@ export async function downloadTicketPdf(
   doc.setTextColor(20, 20, 20);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(22);
-  doc.text(movieTitle.slice(0, 34), 32, 140);
+  doc.text((movie?.title ?? "Movie").slice(0, 34), 32, 140);
 
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  doc.setTextColor(90, 90, 90);
   const meta: [string, string][] = [
     ["Date", showtime ? formatDate(showtime.date) : "—"],
     ["Time", showtime ? formatTime(showtime.time) : "—"],
-    ["Cinema", showtime ? `${showtime.location}` : "—"],
+    ["Cinema", showtime ? showtime.location : "—"],
     ["Screen", showtime ? showtime.screen : "—"],
-    ["Runtime", movieMetaRuntime],
+    ["Runtime", movie?.duration ? formatDuration(movie.duration) : "—"],
   ];
   let y = 172;
   for (const [label, value] of meta) {
     doc.setTextColor(120, 120, 120);
-    doc.text(`${label}`, 32, y);
+    doc.text(label, 32, y);
     doc.setTextColor(30, 30, 30);
     doc.setFont("helvetica", "bold");
     doc.text(value, 140, y);
@@ -100,7 +106,7 @@ export async function downloadTicketPdf(
     doc.setFontSize(13);
     doc.setTextColor(30, 30, 30);
     doc.setFont("helvetica", "bold");
-    const wrapped = doc.splitTextToSize(value, W - 140 - 32);
+    const wrapped = doc.splitTextToSize(value, W - 172);
     doc.text(wrapped, 140, y + 1);
     y += 18 + wrapped.length * 14;
     doc.setFont("helvetica", "normal");
@@ -121,10 +127,4 @@ export async function downloadTicketPdf(
   doc.text("Demo ticket generated in your browser — CineBook does not send real emails.", 32, 678);
 
   doc.save(`cinebook-ticket-${booking.ref}.pdf`);
-}
-
-// runtime is taken from the movie when available
-let movieMetaRuntime = "—";
-export function setTicketRuntime(minutes: number | undefined) {
-  movieMetaRuntime = minutes ? formatDuration(minutes) : "—";
 }
