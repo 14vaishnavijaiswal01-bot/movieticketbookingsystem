@@ -1,5 +1,16 @@
 // CineBook data layer — seed catalogue + localStorage-backed demo persistence.
 
+// Posters are bundled with the app so they always load instantly and
+// sharply — no external CDN needed. The backdrop reuses the same artwork.
+import posterInterstellar from "@/assets/posters/interstellar.jpg";
+import posterDarkKnight from "@/assets/posters/dark-knight.jpg";
+import posterInception from "@/assets/posters/inception.jpg";
+import posterDuneTwo from "@/assets/posters/dune-two.jpg";
+import posterSpiderman from "@/assets/posters/spiderman-nwh.jpg";
+import posterOppenheimer from "@/assets/posters/oppenheimer.jpg";
+import posterGodfather from "@/assets/posters/godfather.jpg";
+import posterAvatar from "@/assets/posters/avatar-twow.jpg";
+
 export type MovieStatus = "now-showing" | "coming-soon";
 
 export interface Movie {
@@ -44,8 +55,6 @@ export const CINEMAS = [
   "CineBook Riverside",
 ];
 
-const POSTER = "https://image.tmdb.org/t/p/w500";
-const BACKDROP = "https://image.tmdb.org/t/p/w1280";
 
 export const SEED_MOVIES: Movie[] = [
   {
