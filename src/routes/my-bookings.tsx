@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { Clock, MapPin, Search, Ticket } from "lucide-react";
+import { Clock, Download, MapPin, Search, Ticket } from "lucide-react";
 
 import type { Booking } from "@/lib/cinebook";
 import {
@@ -14,6 +14,7 @@ import {
   loadMovies,
   loadShowtimes,
 } from "@/lib/cinebook";
+import { downloadTicketPdf } from "@/lib/ticket-pdf";
 
 export const Route = createFileRoute("/my-bookings")({
   head: () => ({
@@ -160,13 +161,30 @@ function MyBookings() {
                   </div>
                   <div className="flex items-center justify-between gap-6 sm:flex-col sm:items-end">
                     <span className="font-bold text-foreground">{formatPrice(booking.total)}</span>
-                    <Link
-                      to="/confirmation/$ref"
-                      params={{ ref: booking.ref }}
-                      className="rounded-lg border border-border px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
-                    >
-                      View Ticket
-                    </Link>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          void downloadTicketPdf(
+                            booking,
+                            getMovieById(booking.movieId, movies),
+                            showtime,
+                          );
+                        }}
+                        className="flex items-center gap-1.5 rounded-lg bg-primary px-3 py-2 text-xs font-semibold text-primary-foreground hover:opacity-90"
+                        aria-label={`Download PDF ticket for ${booking.ref}`}
+                      >
+                        <Download className="h-3.5 w-3.5" />
+                        PDF
+                      </button>
+                      <Link
+                        to="/confirmation/$ref"
+                        params={{ ref: booking.ref }}
+                        className="rounded-lg border border-border px-4 py-2 text-xs font-semibold text-foreground hover:bg-accent"
+                      >
+                        View Ticket
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </li>
